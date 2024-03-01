@@ -1,12 +1,14 @@
 #pragma once
 
+using namespace std;
+
 
 class HuberDistribution {
 private:
     double shift;    // Параметр сдвига
     double scale;    // Параметр масштаба
     double shape;    // Параметр формы (v)
-    std::string label;   // Текстовая метка
+    string label;   // Текстовая метка
 
 public:
     // Конструктор класса
@@ -22,8 +24,8 @@ public:
     void setShape(double newShape);
     double getShape() const;
 
-    void setLabel(const std::string& newLabel);
-    std::string getLabel() const;
+    void setLabel(const string& newLabel);
+    string getLabel() const;
 
     // Плотность нормального распредления
     double phi(double x) const;
@@ -31,7 +33,18 @@ public:
     // Функция нормального распределения
     double Phi(double x) const;
 
+    double K() const;
+
     // Плотность распределения Хьюбера
     double density(double x) const;
+
+    // Дисперсия
+    double sqrt_dispersion() const;
+
+    // Коэффициент эксцесса
+    double kurtosis_coefficient() const;
+
+    // Вероятность попадания в центральный интервал
+    double hitting_central_interval() const;
 };
 
