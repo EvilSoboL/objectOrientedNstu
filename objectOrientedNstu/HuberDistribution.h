@@ -46,5 +46,8 @@ public:
 
     // Вероятность попадания в центральный интервал
     double hitting_central_interval() const;
-};
+
+    // Реализация случайной величины
+    double random_value(int seed) const;
+ };
 

@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <iostream>
+#include <vector>
 #include "HuberDistribution.h"
 
 using namespace std;
@@ -89,4 +90,39 @@ double HuberDistribution::hitting_central_interval() const {
     double K = this->K();
 
     return (2 * Phi - 1) / K;
+};
+
+// Реализация случайной величины
+double HuberDistribution::random_value(int seed) const {
+    default_random_engine e(seed);
+
+    double p0 = this->hitting_central_interval();
+    double p1 = (1. - p0) / 2.;
+    double p2 = p1;
+    double lambda = shape;
+
+    discrete_distribution<> discrete{p0, p1, p2};
+    normal_distribution<> normal;
+    exponential_distribution<> exp(shape);
+
+    double z = discrete(e);  // Шаг 1
+    if (z == 0) {
+        double x1 = normal(e);  // Шаг 2
+        int i = 0;
+
+        while (x1 < -shape || x1 > shape) {  // Шаг 3
+            i += 1;
+            e.seed(i);
+            x1 = normal(e);
+        }
+        return x1;
+    }
+    else if (z == 1) {  // Шаг 5
+        double x2 = exp(e);
+        return shape + x2;
+    }
+    else if (z == 2) {  // Шаг 5
+        double x2 = exp(e);
+        return -shape - x2;
+    };
 };
