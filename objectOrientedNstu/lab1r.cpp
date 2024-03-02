@@ -12,10 +12,13 @@
 using namespace std;
 
 
+<<<<<<< HEAD
 // ѕроверка основных параметров распределени€
 static void check() {
 	vector<double> shapes = { 0.5, 0.75, 1, 1.5, 2, 2.5, 3 };
 
+=======
+>>>>>>> cb2d48a472cd816fed0657ba51b59aaa35fc5a92
 	for (size_t i = 0; i < shapes.size(); ++i) {
 		HuberDistribution dist(0.0, 1.0, shapes[i], "Note");
 
