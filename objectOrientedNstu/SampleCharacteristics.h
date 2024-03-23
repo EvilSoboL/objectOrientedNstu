@@ -36,9 +36,11 @@ public:
     // Метод для проведения анализа выборки
     void sampleAnalysis();
 
-    void saveToCsv(const string& filename);
+    void saveToCsv(vector<double> vector, const string& filename);
 
     vector<double> generateDensity(double shift, double scale, double shape);
+
+    void saveSampleAndDensity(double shift, double scale, double shape);
 };
 
 #endif // SAMPLE_CHARACTERISTICS_H

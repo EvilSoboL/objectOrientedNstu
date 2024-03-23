@@ -5,9 +5,8 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
-// Предполагается, что класс HuberDistribution уже определён где-то
-// и имеет метод random_value(int seed) для генерации случайного значения
 
 double SampleCharacteristics::mean() {
 	int N = size(sample);
@@ -72,7 +71,7 @@ void SampleCharacteristics::sampleAnalysis() {
 	cout << "max is: " << minMax(alpha).second << endl;
 }
 
-void SampleCharacteristics::saveToCsv(const string& filename) {
+void SampleCharacteristics::saveToCsv(vector<double> vector, const string& filename) {
 	// Открытие файла для записи (и создание, если не существует)
 	ofstream file(filename, ios::trunc);
 
@@ -83,7 +82,7 @@ void SampleCharacteristics::saveToCsv(const string& filename) {
 	}
 
 	// Запись данных выборки в файл в формате CSV
-	for (const auto& value : sample) {
+	for (const auto& value : vector) {
 		file << value << "\n";
 	}
 
@@ -100,4 +99,18 @@ vector<double> SampleCharacteristics::generateDensity(double shift, double scale
 	for (int i = 0; i < sample.size(); ++i)
 		density.push_back(dist.density(sample[i]));
 	return density;
+}
+
+void SampleCharacteristics::saveSampleAndDensity(double shift, double scale, double shape) {
+	stringstream ss;
+	int sample_size = size(sample);
+	vector <double> density = generateDensity(shift, scale, shape);
+
+	ss << shift << "_" << scale << "_" << shape << "_" << sample_size;
+
+	string file_name_sample = ss.str() + "_sample.csv";
+	string file_name_density = ss.str() + "_density.csv";
+
+	saveToCsv(sample, file_name_sample);
+	saveToCsv(density, file_name_density);
 }
