@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "HuberDistribution.h"
+#include "SampleCharacteristics.h"
 #include <vector>
 #include <algorithm>
 #include <numeric>
@@ -169,9 +170,8 @@ void check_dispersion_kurtosis(double shift, double scale, double shape) {
 	cout << "Kurtosis: " << dist.kurtosis_coefficient() << endl;
 };
 
-void main() {
-	// check();
-	check_dispersion_kurtosis(0, 1, 0.5);
-	// save_sample_density(5, 4, 3, 100000);
-
+int main() {
+	vector<double> sample = generate_sample(0, 1, 0.5, 50);
+	SampleCharacteristics sc(sample);
+	sc.sampleAnalysis();
 };

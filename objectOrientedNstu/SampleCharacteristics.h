@@ -2,6 +2,7 @@
 #define SAMPLE_CHARACTERISTICS_H
 
 #include <vector>
+#include <string>
 #include <utility>
 
 using namespace std; // Обратите внимание: плохая практика для заголовочных файлов!
@@ -12,7 +13,7 @@ private:
 
 public:
     // Конструктор с параметром для инициализации вектора
-    explicit SampleCharacteristics(const vector<double>& sampleData) : sample(sampleData) {}
+    SampleCharacteristics(const vector<double>& sampleData) : sample(sampleData) {}
 
     // Геттер для переменной sample
     vector<double> getSample() const { return sample; }
@@ -21,19 +22,23 @@ public:
     void setSample(const vector<double>& sampleData) { sample = sampleData; }
 
     // Метод для вычисления среднего значения вектора
-    double mean() const;
+    double mean();
 
     // Метод для вычисления медианы вектора
-    double median() const;
+    double median();
 
     // Метод для вычисления обрезанного и усеченного среднего
-    pair<double, double> trimmedWinsorizedMean(double alpha) const;
+    pair<double, double> trimmedWinsorizedMean(double alpha);
 
     // Метод для нахождения минимального и максимального значений
-    pair<double, double> minMax(double alpha) const;
+    pair<double, double> minMax(double alpha);
 
     // Метод для проведения анализа выборки
-    void sampleAnalysis(double alpha) const;
+    void sampleAnalysis();
+
+    void saveToCsv(const string& filename);
+
+    vector<double> generateDensity(double shift, double scale, double shape);
 };
 
 #endif // SAMPLE_CHARACTERISTICS_H
