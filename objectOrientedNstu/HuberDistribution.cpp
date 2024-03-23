@@ -11,8 +11,18 @@
 using namespace std;
 
 // Конструктор класса
-HuberDistribution::HuberDistribution(double shift, double scale, double shape, string label) :
-    shift(shift), scale(scale), shape(shape), label(label) {
+HuberDistribution::HuberDistribution(double shift, double scale, double shape, string label)
+{
+    if (scale == 0) {
+        throw invalid_argument("scale must be non-zero!");
+    }
+    if (shape <= 0) {
+        throw invalid_argument("shape must be pozitive!");
+    }
+    this->shift = shift;
+    this->scale = scale;
+    this->shape = shape;
+    this->label = label;
 };
 
 // Сеттеры, геттеры
@@ -38,7 +48,7 @@ double HuberDistribution::phi(double x) const {
     double mean = 0.0;
     double stddev = 1.0;
 
-    return 1.0 / (stddev * sqrt(2.0 * M_PI)) * exp( - pow(((x - mean) / (2.0 * pow(stddev, 2))), 2));
+    return 1.0 / (stddev * sqrt(2.0 * M_PI)) * exp( - 0.5 * pow(((x - mean) / (pow(stddev, 2))), 2));
 };
 
 // Функция нормального распределения

@@ -7,20 +7,19 @@
 #include <numeric>
 #include <utility>
 #include <conio.h>
+#include <fstream>
+#include <sstream>
 
 
 using namespace std;
 
 
-<<<<<<< HEAD
 // Проверка основных параметров распределения
 static void check() {
 	vector<double> shapes = { 0.5, 0.75, 1, 1.5, 2, 2.5, 3 };
 
-=======
->>>>>>> cb2d48a472cd816fed0657ba51b59aaa35fc5a92
 	for (size_t i = 0; i < shapes.size(); ++i) {
-		HuberDistribution dist(0.0, 1.0, shapes[i], "Note");
+		HuberDistribution dist(0., 1., shapes[i], "Note");
 
 		cout << "For nu = " << shapes[i] << endl;
 		cout << "Variance: " << dist.sqrt_dispersion() << endl;
@@ -32,8 +31,8 @@ static void check() {
 };
 
 // Генерация выборки
-static vector<double> generate_sample(int sample_len) {
-	HuberDistribution dist(0.0, 1.0, 0.5, "Note");
+static vector<double> generate_sample(double shift, double scale, double shape, int sample_len) {
+	HuberDistribution dist(shift, scale, shape, "Note");
 	vector<double> samples;
 
 	for (int i = 0; i < sample_len; ++i)
@@ -105,8 +104,74 @@ static void sample_analysis(vector<double> sample) {
 	cout << "max is: " << my_min_max(alpha, sample).second << endl;
 };
 
+// Сохранение выборки в csv
+void save_to_csv(vector<double> sample, const string& filename) {
+	// Открытие файла для записи (и создание, если не существует)
+	ofstream file(filename, ios::trunc);
+
+	// Проверка, открыт ли файл
+	if (!file.is_open()) {
+		cerr << "Error while openning file" << endl;
+		return;
+	}
+
+	// Запись данных выборки в файл в формате CSV
+	for (const auto& value : sample) {
+		file << value << "\n";
+	}
+
+	// Закрытие файла
+	file.close();
+
+	cout << "Sample saved '" << filename << "'." << endl;
+};
+
+double select_random_number(const vector<double>& sample) {
+	// Размер выборки
+	int N = sample.size();
+
+	// Генерация случайного индекса
+	int index = rand() % N;
+
+	// Возвращение значения по случайному индексу
+	return sample[index];
+}
+
+
+// Вычисление вектора плотности
+static vector<double> generate_density(double shift, double scale, double shape, vector<double>& sample) {
+	HuberDistribution dist(shift, scale, shape, "Note");
+	vector<double> density;
+
+	for (int i = 0; i < sample.size(); ++i)
+		density.push_back(dist.density(sample[i]));
+	return density;
+};
+
+void save_sample_density(double shift, double scale, double shape, int sample_size) {
+	vector <double> sample = generate_sample(shift, scale, shape, sample_size);
+	vector <double> density = generate_density(shift, scale, shape, sample);
+
+	stringstream ss;
+	ss << shift << "_" << scale << "_" << shape << "_" << sample_size;
+
+	string file_name_sample = ss.str() + "_sample.csv";
+	string file_name_density = ss.str() + "_density.csv";
+
+	save_to_csv(sample, file_name_sample);
+	save_to_csv(density, file_name_density);
+};
+
+void check_dispersion_kurtosis(double shift, double scale, double shape) {
+	HuberDistribution dist(shift, scale, shape, "Note");
+
+	cout << "Variance: " << dist.sqrt_dispersion() << endl;
+	cout << "Kurtosis: " << dist.kurtosis_coefficient() << endl;
+};
+
 void main() {
 	// check();
-	vector <double> sample = generate_sample(1000);
-	sample_analysis(sample);
+	check_dispersion_kurtosis(0, 1, 0.5);
+	// save_sample_density(5, 4, 3, 100000);
+
 };

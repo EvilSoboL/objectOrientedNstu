@@ -24,9 +24,15 @@
     <ClCompile Include="HuberDistribution.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="SampleCharacteristics.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HuberDistribution.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleCharacteristics.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
